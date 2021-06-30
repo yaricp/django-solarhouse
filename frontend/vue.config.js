@@ -18,6 +18,7 @@ module.exports = {
       );
     }
   },
+
   chainWebpack: config => {
     config.module
       .rule('vue')
@@ -32,6 +33,7 @@ module.exports = {
         }
       }));
   },
+
   css: {
     loaderOptions: {
       sass: {
@@ -40,5 +42,9 @@ module.exports = {
         }
       }
     }
-  }
+  },
+
+  transpileDependencies: [
+    'vuetify'
+  ]
 }

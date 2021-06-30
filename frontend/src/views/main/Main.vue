@@ -3,130 +3,30 @@
     <v-navigation-drawer persistent :mini-variant="miniDrawer" v-model="showDrawer" fixed app>
       <v-layout column fill-height>
         <v-list>
-          <v-subheader>Main menu</v-subheader>
-          <v-list-tile to="/main/dashboard">
-            <v-list-tile-action>
-              <v-icon>web</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Dashboard</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/main/3d">
-            <v-list-tile-action>
-              <v-icon>web</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>3D</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/main/house">
-            <v-list-tile-action>
-              <v-icon>web</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Houses</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider></v-divider>
-          <v-list-tile to="/main/profile/view">
-            <v-list-tile-action>
-              <v-icon>person</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Profile</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/main/profile/edit">
-            <v-list-tile-action>
-              <v-icon>edit</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Edit Profile</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/main/profile/password">
-            <v-list-tile-action>
-              <v-icon>vpn_key</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Change Password</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-        <v-divider></v-divider>
-        <v-list subheader v-show="hasAdminAccess">
-          <v-subheader>Admin</v-subheader>
-          <v-list-tile to="/main/admin/users/all">
-            <v-list-tile-action>
-              <v-icon>group</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Manage Users</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/main/admin/users/create">
-            <v-list-tile-action>
-              <v-icon>person_add</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Create User</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-        <v-spacer></v-spacer>
-        <v-list>
-          <v-list-tile @click="logout">
-            <v-list-tile-action>
-              <v-icon>close</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Logout</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider></v-divider>
-          <v-list-tile @click="switchMiniDrawer">
-            <v-list-tile-action>
-              <v-icon v-html="miniDrawer ? 'chevron_right' : 'chevron_left'"></v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Collapse</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <v-list-item
+              v-for="(item, i) in items"
+              :key="i"
+            >
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
         </v-list>
       </v-layout>
     </v-navigation-drawer>
-    <v-toolbar dark color="primary" app>
-      <v-toolbar-side-icon @click.stop="switchShowDrawer"></v-toolbar-side-icon>
+    <v-app-bar dark color="primary" app>
+      <v-navigation-drawer @click.stop="switchShowDrawer"></v-navigation-drawer>
       <v-toolbar-title v-text="appName"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu bottom left offset-y>
-        <v-btn slot="activator" icon>
-          <v-icon>more_vert</v-icon>
-        </v-btn>
-        <v-list>
-          <v-list-tile to="/main/profile">
-            <v-list-tile-content>
-              <v-list-tile-title>Profile</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-icon>person</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-list-tile @click="logout">
-            <v-list-tile-content>
-              <v-list-tile-title>Logout</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-icon>close</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-    </v-toolbar>
-    <v-content>
+      
+    </v-app-bar>
+    <v-main>
       <router-view></router-view>
-    </v-content>
+    </v-main>
     <v-footer class="pa-3" fixed app>
       <v-spacer></v-spacer>
       <span>&copy; {{appName}}</span>
@@ -152,6 +52,22 @@ const routeGuardMain = async (to, from, next) => {
 
 @Component
 export default class Main extends Vue {
+
+  public items = [
+        {
+          icon: 'mdi-wifi',
+          text: 'Wifi',
+        },
+        {
+          icon: 'mdi-bluetooth',
+          text: 'Bluetooth',
+        },
+        {
+          icon: 'mdi-chart-donut',
+          text: 'Data Usage',
+        },
+      ]
+
   public appName = appName;
 
   public beforeRouteEnter(to, from, next) {

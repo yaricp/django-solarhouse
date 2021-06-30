@@ -36,8 +36,9 @@
     "sass-loader": "^10",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.4",
-    "vue-cli-plugin-vuetify": "^2.0.2",
-    "vue-template-compiler": "^2.5.22"
+    "vue-cli-plugin-vuetify": "~2.4.1",
+    "vue-template-compiler": "^2.5.22",
+    "vuetify-loader": "^1.7.0"
   },
   "postcss": {
     "plugins": {
