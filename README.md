@@ -1,1 +1,1 @@
-# django-solarhouse
+# solarhouse
