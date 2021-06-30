@@ -66,7 +66,7 @@ export default class Main extends Vue {
           icon: 'mdi-chart-donut',
           text: 'Data Usage',
         },
-      ]
+      ];
 
   public appName = appName;
 
