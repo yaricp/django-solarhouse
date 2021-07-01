@@ -31,6 +31,7 @@
         accept="image/*"
         v-model="file"
         label="File input"
+        @onload="load"
       ></v-file-input>
   </v-container>
 </template>
@@ -47,6 +48,7 @@ import {
   IcoSphere,
   Camera,
   Material,
+  SceneLoader,
 } from 'vue-babylonjs';
 @Component ({
   mixins: [Entity],
@@ -66,6 +68,10 @@ export default class Dashboard extends Vue {
     public file = '';
     public size = 2;
     public position = [0, 0, 5];
+
+    public load() {
+      SceneLoader.Append('');
+    }
 
 }
 </script>
