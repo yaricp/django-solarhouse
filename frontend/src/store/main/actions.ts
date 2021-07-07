@@ -1,6 +1,6 @@
 import { api } from '@/api/user';
 import router from '@/router';
-import { getLocalToken, removeLocalToken, saveLocalToken } from '@/utils';
+import { getLocalToken, removeLocalToken, saveLocalToken } from '@/utils/index';
 import { AxiosError } from 'axios';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { ActionContext } from 'vuex';

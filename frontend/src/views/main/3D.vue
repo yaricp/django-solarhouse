@@ -1,21 +1,22 @@
 <template>
   <v-container fluid>
     <Scene>
-  <Camera type="arcRotate"></Camera>
-  <Entity>
-    <Animation property="rotation.y" :duration="5" :end="Math.PI*2"></Animation>
-    <DirectionalLight specular="#0F0" diffuse="F00" :direction="[2,0,100]"></DirectionalLight>
-  </Entity>
-  <Box :position="[-2,0,0]">
-    <Material diffuse="#ffffff"></Material>
-  </Box>
-  <IcoSphere :position="[1.3,0,0]">
-    <Material diffuse="#FF0"></Material>
-    <Animation property="rotation.x" :duration="3" :end="Math.PI * 2"></Animation>
-    <Animation property="rotation.y" :duration="3" :end="Math.PI * 2"></Animation>
-  </IcoSphere>
+      <Camera type="arcRotate"></Camera>
+        <PointLight :position="sun_position" specular="#FF0000"></PointLight>
+        <Plane :position="[0,0,0]" :scaling="[0,10,0]" :rotate="[45,45,0]"></Plane>
+        <IcoSphere :position="[0,0,0]" :scaling="[1,1,1]">
+        <Material diffuse="#FF0"></Material>
+      </IcoSphere>
 </Scene>
     <v-divider></v-divider>
+      <v-card>{{ hour }} - {{ Sun.position }}</v-card>
+      <v-slider
+      hint="Im a hint"
+      max="24"
+      min="0"
+      v-model="hour"
+      @change="changeHour"
+    ></v-slider>
     <v-text-field
       v-model="size"
       type="number"
@@ -37,12 +38,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { sunVector } from "@/utils/solar";
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import {
   Entity,
   Scene,
-  Box,
+  Plane,
   DirectionalLight,
+  Vector3,
   Animation,
   PointLight,
   IcoSphere,
@@ -55,7 +58,7 @@ import {
   components: {
     Entity,
     Scene,
-    Box,
+    Plane,
     DirectionalLight,
     Animation,
     PointLight,
@@ -64,13 +67,47 @@ import {
     Material,
   },
 })
-export default class Dashboard extends Vue {
-    public file = '';
-    public size = 2;
-    public position = [0, 0, 5];
+
+
+export default class DScene extends Vue {
+    public file = ''
+    public size = 2
+    public hour = 0
+    public position = [0, 0, 5]
+    public Sun = {
+        specular: "#0F0",
+        diffuse: "F00",
+        direction: [0, 0, 100],
+        position: [10,10,0]
+    }
+
+    computed: {
+        sun_position() {
+             console.log(e);
+             const vector = sunVector(this.hour, true)
+             const x = vector[0][0] * 10;
+             const y = vector[1][0] * 10;
+             const z = vector[2][0] * 10;
+             return  [x, y, z];
+        }
+    }
 
     public load() {
       SceneLoader.Append('');
+    }
+
+    public onScene (scene) {
+      var babylon = this.BABYLON
+      var engine = scene.getEngine()
+      var filesInput = new babylon.FilesInput(engine, null, scene, null, null, null, function () {
+        babylon.Tools.ClearLogCache()
+      }, null, null)
+      filesInput.onProcessFileCallback = function (file, name, extension) {
+        console.log('done: ' + (typeof file) + ' ' + name + ' ' + extension)
+        return true
+      }
+      this.filesInput = filesInput
+      this.myScene = scene
     }
 
 }
