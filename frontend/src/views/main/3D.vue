@@ -9,14 +9,14 @@
       </IcoSphere>
 </Scene>
     <v-divider></v-divider>
-      <v-card>{{ hour }} - {{ Sun.position }}</v-card>
+      <v-card>{{ hour }} - {{ sun_position }}</v-card>
       <v-slider
       hint="Im a hint"
       max="24"
       min="0"
       v-model="hour"
-      @change="changeHour"
     ></v-slider>
+
     <v-text-field
       v-model="size"
       type="number"
@@ -38,7 +38,8 @@
 </template>
 
 <script lang="ts">
-import { sunVector } from "@/utils/solar";
+import SunCalc from 'suncalc';
+import { vector_from_sun_position } from '@/utils/utils'
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import {
   Entity,
@@ -73,23 +74,30 @@ export default class DScene extends Vue {
     public file = ''
     public size = 2
     public hour = 0
-    public position = [0, 0, 5]
-    public Sun = {
-        specular: "#0F0",
-        diffuse: "F00",
-        direction: [0, 0, 100],
-        position: [10,10,0]
-    }
+    public logitude = 82.9346
+    public latitude = 55.0415
+    public Y = 10
+    public Z = 0
 
-    computed: {
-        sun_position() {
-             console.log(e);
-             const vector = sunVector(this.hour, true)
-             const x = vector[0][0] * 10;
-             const y = vector[1][0] * 10;
-             const z = vector[2][0] * 10;
-             return  [x, y, z];
-        }
+    get sun_position() {
+         let today = new Date();
+         let datetime = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate(),
+            this.hour,
+            0,
+            0);
+         console.log(this.hour)
+         const sunPos = SunCalc.getPosition(
+            datetime,
+            this.latitude,
+            this.logitude
+         );
+        console.log(sunPos)
+        const vector = vector_from_sun_position(sunPos, 10);
+        console.log(vector);
+        return  vector;
     }
 
     public load() {
@@ -99,16 +107,20 @@ export default class DScene extends Vue {
     public onScene (scene) {
       var babylon = this.BABYLON
       var engine = scene.getEngine()
-      var filesInput = new babylon.FilesInput(engine, null, scene, null, null, null, function () {
-        babylon.Tools.ClearLogCache()
-      }, null, null)
-      filesInput.onProcessFileCallback = function (file, name, extension) {
-        console.log('done: ' + (typeof file) + ' ' + name + ' ' + extension)
-        return true
-      }
+      var filesInput = new babylon.FilesInput(
+        engine,
+        null,
+        scene,
+        null,
+        null,
+        null,
+        function () { babylon.Tools.ClearLogCache() },
+        null,
+        null
+      )
+
       this.filesInput = filesInput
       this.myScene = scene
     }
-
 }
 </script>

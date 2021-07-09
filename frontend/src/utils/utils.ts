@@ -13,6 +13,13 @@ export const filter_norms = pos => {
     return pos.y > 0;
 }
 
+export const vector_from_sun_position = (position, length) => {
+    const z = Math.tan(position.altitude) * length;
+    const x = Math.sin(position.azimuth) * length;
+    const y = Math.cos(position.azimuth) * length;
+    return [x, y, z]
+}
+
 export const centralize = (obj, scene) => {
     var vertices = obj.getVerticesData(_babylonjs_core_Meshes_buffer__WEBPACK_IMPORTED_MODULE_3__["VertexBuffer"].PositionKind);
     var center = obj.getBoundingInfo().boundingBox.center;
